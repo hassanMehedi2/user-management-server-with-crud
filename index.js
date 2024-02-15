@@ -3,7 +3,7 @@ const cors = require('cors');
 require('dotenv').config()
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const app= express();
+const app = express();
 const port = process.env.PORT || 5000;
 
 // middleware 
@@ -29,8 +29,13 @@ async function run() {
 
     const usersCollection = client.db("userDB").collection("users");
 
+    app.get('/user', async (req, res) => {
+      const cursor = usersCollection.find();
+      const users = await cursor.toArray();
+      res.send(users);
+    })
 
-    app.post('/user',async(req,res)=>{
+    app.post('/user', async (req, res) => {
       const user = req.body;
       const result = await usersCollection.insertOne(user);
       res.send(result);
@@ -50,10 +55,10 @@ run().catch(console.dir);
 
 
 
-app.get('/',(req,res)=>{
-    res.send("User management server is running ");
+app.get('/', (req, res) => {
+  res.send("User management server is running ");
 })
 
-app.listen(port,()=>{
-    console.log("server is running on port : ",{port});
+app.listen(port, () => {
+  console.log("server is running on port : ", { port });
 })
