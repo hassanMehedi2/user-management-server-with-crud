@@ -54,6 +54,23 @@ async function run() {
       res.send(result)
     })
 
+    app.put(`/user/:id`,async(req,res)=>{
+      const id = req.params.id;
+      const user = req.body;
+      const filter = {_id: new ObjectId(id)};
+      const updatedUser = {
+        $set:{
+          name: user.name,
+          email: user.email,
+          gender: user.gender,
+          status: user.status
+        }
+      }
+      const result = await usersCollection.updateOne(filter,updatedUser);
+      res.send(result);
+
+    })
+
 
 
     // Send a ping to confirm a successful connection
